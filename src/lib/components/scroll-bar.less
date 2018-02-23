@@ -30,8 +30,11 @@
 		border-left: 1px solid rgba(190, 190, 190, .5);
 		border-right: 1px solid rgba(190, 190, 190, .5);
 		box-sizing: border-box;
-		padding: 1px;
+		padding: 1px 2px;
 		z-index: 9999999;
+		&:hover &-bar{
+			background: rgb(100, 100, 100);
+		}
 		&-y{
 			width: 14px;
 			height: 100%;
@@ -46,8 +49,9 @@
 			background: rgba(190, 190, 190, 1);
 			position: absolute;
 			border-radius: 4px;
+			transition: background .2s ease;
 			&-y{
-				width: ~'calc(100% - 2px)';
+				width: ~'calc(100% - 4px)';
 				min-height: 14px;
 			}
 		}

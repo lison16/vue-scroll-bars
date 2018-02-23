@@ -50,8 +50,8 @@ export default {
 				width: 0,
 				height: 0
 			},
-			scrollBarYHeight: 0,
-			initY: 0
+			initY: 0,
+			initOffsetY: 0
 		}
 	},
 	computed: {
@@ -69,8 +69,11 @@ export default {
 		percentY () {
 			return this.wraperSize.height / this.contentSize.height;
 		},
+		scrollBarYHeight () {
+			return this.percentY * (this.wraperSize.height - 2);
+		},
 		scrollBarYStyles () {
-			let height = this.percentY * (this.wraperSize.height - 2);
+			let height = this.scrollBarYHeight;
 			return {
 				transform: `translate3d(${this.scrollX}px, ${this.scrollY * (height / this.wraperSize.height)}px, 0px)`,
 				height: `${height}px`
@@ -117,8 +120,8 @@ export default {
 			}
 		},
 		handleMousemoveY (e) {
-			console.log(e.pageY - this.initY)
-			this.scrollY = (e.pageY - this.initY) / (this.percentY * (this.wraperSize.height - 2) / this.wraperSize.height);
+			let offset = e.pageY - this.initY;
+			this.scrollY = this.initOffsetY + offset / ((this.wraperSize.height - 2 - this.scrollBarYHeight) / (this.contentSize.height - this.wraperSize.height));
 			if (this.scrollY >= this.gapY) {
 				this.scrollY = Math.min(this.gapY, this.scrollY);
 			} else if (this.scrollY <= 0) {
@@ -131,8 +134,8 @@ export default {
 			document.removeEventListener('mousemove', this.handleMouseup);
 		},
 		handleMousedownScrollBarY (e) {
-			if (this.initY === 0) this.initY = e.pageY;
-			// this.initY = e.pageY;
+			this.initY = e.pageY;
+			this.initOffsetY = this.scrollY;
 			document.addEventListener('mousemove', this.handleMousemoveY);
 			document.addEventListener('mouseup', this.handleMouseup);
 		}
